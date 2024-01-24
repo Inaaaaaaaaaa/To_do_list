@@ -4,17 +4,28 @@
  */
 package todolist;
 
-/**
- *
- * @author University
- */
-public class Todolist {
+import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+public class Todolist extends JFrame {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
     }
     
+    public Todolist()
+    {
+        //title of frame 
+        super("To do list");
+        
+        //size of frame
+        this.setSize(600,600);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+    }
 }
