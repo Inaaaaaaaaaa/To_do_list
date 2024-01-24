@@ -6,8 +6,9 @@ package todolist;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Todolist extends JFrame {
     
@@ -20,6 +21,8 @@ public class Todolist extends JFrame {
      */
     public static void main(String[] args) {
         
+        //new to do list 
+        Todolist todolist = new Todolist();
         //display frame
         new Todolist().setVisible(true);
         
@@ -53,5 +56,34 @@ public class Todolist extends JFrame {
         input.add(remove);
         
         this.add(input, BorderLayout.NORTH);
+        
+        //action listeners for add and remove button
+        
+        //add
+        add.addActionListener(new ActionListener()
+        {
+           public void actionPerformed(ActionEvent e)
+           {
+               String inputs = inputfield.getText();
+               if(!inputs.isEmpty())
+               {
+                   model.addElement(inputs);
+                   inputfield.setText(""); //leaves box empty
+               }
+           }
+        });
+        
+        //remove
+        remove.addActionListener(new ActionListener()
+        {
+           public void actionPerformed(ActionEvent e)
+           {
+               int selectedIndex = list.getSelectedIndex();
+               if(selectedIndex != -1)
+               {
+                   model.remove(selectedIndex);
+               }
+           }
+        });
     }
 }
