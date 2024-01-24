@@ -16,6 +16,9 @@ public class Todolist extends JFrame {
      */
     public static void main(String[] args) {
         
+        //display frame
+        new Todolist().setVisible(true);
+        
     }
     
     public Todolist()
