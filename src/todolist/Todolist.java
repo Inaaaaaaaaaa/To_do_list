@@ -9,12 +9,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Todolist extends JFrame {
     
-    private JList<String> list;
+    private JPanel listPanel;
     private JTextField inputfield;
-    private DefaultListModel<String> model;
+    private Map<JButton, JPanel> task;
 
     /**
      * @param args the command line arguments
@@ -24,7 +26,7 @@ public class Todolist extends JFrame {
         //new to do list 
         Todolist todolist = new Todolist();
         //display frame
-        new Todolist().setVisible(true);
+        todolist.setVisible(true);
         
     }
     
@@ -34,56 +36,70 @@ public class Todolist extends JFrame {
         super("To do list");
         
         //size of frame
-        this.setSize(650,600);
+        this.setSize(500,600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         
-        //input and buttons 
-        JPanel input = new JPanel();
-        inputfield = new JTextField(30);
-        JButton add = new JButton("Add task");
-        JButton remove = new JButton("Remove task");
-        
-        //model for list 
-        model = new DefaultListModel<>();
-        list = new JList<>(model);
-        JScrollPane scroll = new JScrollPane(list);
+        //Main panel 
+        listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        JScrollPane scroll = new JScrollPane(listPanel);
         this.add(scroll, BorderLayout.CENTER);
+
         
-        //add components 
-        input.add(inputfield);
-        input.add(add);
-        input.add(remove);
+        //input and buttons
+        JPanel inputP = new JPanel();
+        inputfield = new JTextField(30);
+        JButton addBtn = new JButton("Add");
+        inputP.add(inputfield);
+        inputP.add(addBtn);
         
-        this.add(input, BorderLayout.NORTH);
+        
+        //adding input and buttons on North of frame
+        this.add(inputP, BorderLayout.NORTH);
+        
+        //Using map to keep track of tasks 
+        task = new HashMap<>();
         
         //action listeners for add and remove button
         
         //add
-        add.addActionListener(new ActionListener()
+        addBtn.addActionListener(new ActionListener()
         {
            public void actionPerformed(ActionEvent e)
            {
                String inputs = inputfield.getText();
                if(!inputs.isEmpty())
                {
-                   model.addElement(inputs);
-                   inputfield.setText(""); //leaves box empty
+                   JPanel taskP = new JPanel();
+                   taskP.setLayout(new BoxLayout(taskP, BoxLayout.X_AXIS));
+                   taskP.add(new JLabel(inputs));
+                   JButton removeBtn = new JButton("Remove");
+                   taskP.add(removeBtn);
+                   listPanel.add(taskP);
+                   listPanel.revalidate();
+                   listPanel.repaint();
+                   inputfield.setText("");
+                   
+                   task.put(removeBtn, taskP);
+                   
+                //remove
+                removeBtn.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                {
+                    JPanel panelRemove = task.get((JButton) e.getSource());
+                    listPanel.remove(panelRemove);
+                    listPanel.revalidate();
+                    listPanel.repaint();
+           
+                }
+        });
+
                }
            }
         });
         
-        //remove
-        remove.addActionListener(new ActionListener()
-        {
-           public void actionPerformed(ActionEvent e)
-           {
-               int selectedIndex = list.getSelectedIndex();
-               if(selectedIndex != -1)
-               {
-                   model.remove(selectedIndex);
-               }
-           }
-        });
+
     }
 }
